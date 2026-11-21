@@ -2,14 +2,16 @@
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:state_pressed="true">
         <shape android:shape="rectangle">
-            <corners android:radius="8dp" />
-            <solid android:color="#384D72" />
+            <solid android:color="#31595A"/>
+            
+            <corners android:radius="15dp"/>
         </shape>
     </item>
     <item>
         <shape android:shape="rectangle">
-            <corners android:radius="8dp" />
-            <solid android:color="#1F2A3F" />
+            <solid android:color="@color/dialpad_button"/>
+            
+            <corners android:radius="15dp"/>
         </shape>
     </item>
 </selector>

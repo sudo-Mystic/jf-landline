@@ -100,8 +100,8 @@ public class InCallActivity extends Activity implements JioCallListener {
         sipManager = JioSipManager.getInstance(this);
         sipManager.addCallListener(this);
 
-        audioManager = new JioAudioManager(this);
-        audioManager.startCallAudio();
+        // Borrow the call-scoped audio controller; SIP/Telecom owns its lifecycle.
+        audioManager = sipManager.getCallAudioManager();
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
@@ -248,9 +248,7 @@ public class InCallActivity extends Activity implements JioCallListener {
         if (chronometer != null) {
             chronometer.stop();
         }
-        if (audioManager != null) {
-            audioManager.stopCallAudio();
-        }
+        // Audio ends when SIP reports DISCONNECTED, not when an Activity closes.
         finish();
     }
 
@@ -297,7 +295,7 @@ public class InCallActivity extends Activity implements JioCallListener {
     @Override
     protected void onResume() {
         super.onResume();
-        if (audioManager != null) {
+        if (audioManager != null && sipManager != null && sipManager.isCallActive()) {
             audioManager.applyCallAudioRouting();
             updateSpeakerButton();
             updateMuteButton();
@@ -337,8 +335,6 @@ public class InCallActivity extends Activity implements JioCallListener {
         if (sipManager != null) {
             sipManager.removeCallListener(this);
         }
-        if (audioManager != null) {
-            audioManager.stopCallAudio();
-        }
+        // Audio lifecycle is owned by JioSipManager, not by this Activity.
     }
 }

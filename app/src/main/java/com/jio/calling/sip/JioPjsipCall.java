@@ -189,11 +189,15 @@ public class JioPjsipCall extends Call {
             logToFile("connectMedia: CallSlot=" + callSlot + " -> PlaySlot=" + playSlot + ", CapSlot=" + capSlot
                     + " -> CallSlot=" + callSlot);
 
+            boolean captureRequested = false;
+            boolean playbackRequested = false;
+
             // Connect Microphone -> Call
             if (capDev != null) {
                 try {
                     capDev.startTransmit(callAudMed);
-                    logToFile("connectMedia: capDev.startTransmit(callAudMed) SUCCESS");
+                    captureRequested = true;
+                    logToFile("connectMedia: microphone TX connection requested");
                 } catch (Exception e) {
                     logToFile("connectMedia: capDev.startTransmit ERROR: " + e.getMessage());
                 }
@@ -203,7 +207,8 @@ public class JioPjsipCall extends Call {
             if (playDev != null) {
                 try {
                     callAudMed.startTransmit(playDev);
-                    logToFile("connectMedia: callAudMed.startTransmit(playDev) SUCCESS");
+                    playbackRequested = true;
+                    logToFile("connectMedia: playback RX connection requested");
                 } catch (Exception e) {
                     logToFile("connectMedia: callAudMed.startTransmit ERROR: " + e.getMessage());
                 }
@@ -228,8 +233,14 @@ public class JioPjsipCall extends Call {
             } catch (Exception ignored) {
             }
 
-            mediaConnected = true;
-            return true;
+            // startTransmit may finish asynchronously. These flags only mean
+            // that both requests were accepted; they do not prove RTP carries speech.
+            mediaConnected = captureRequested && playbackRequested;
+            if (!mediaConnected) {
+                logToFile("connectMedia: incomplete: captureRequested=" + captureRequested
+                        + ", playbackRequested=" + playbackRequested);
+            }
+            return mediaConnected;
         } catch (Exception e) {
             logToFile("connectMedia: FATAL exception: " + e.getMessage());
             return false;
@@ -301,8 +312,7 @@ public class JioPjsipCall extends Call {
     }
 
     public synchronized void disconnectMedia() {
-        if (!mediaConnected)
-            return;
+        // Always clean up. One direction may have connected even if the other failed.
         try {
             logToFile("disconnectMedia: stopping transmits");
             Endpoint ep = sipManager.getEndpoint();

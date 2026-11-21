@@ -23,11 +23,17 @@ jobs:
           distribution: temurin
           java-version: '17'
           cache: gradle
-      - name: Build debug APK
-        run: bash ./gradlew assembleDebug --no-daemon
+      - name: Build debug and signed release test APKs
+        run: bash ./gradlew assembleDebug assembleRelease --no-daemon
       - name: Upload test APK
         uses: actions/upload-artifact@v4
         with:
           name: jf-landline-audio-fix-debug
           path: app/build/outputs/apk/debug/app-debug.apk
+          if-no-files-found: error
+      - name: Upload signed release test APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: jf-landline-audio-fix-release-test
+          path: app/build/outputs/apk/release/app-release.apk
           if-no-files-found: error

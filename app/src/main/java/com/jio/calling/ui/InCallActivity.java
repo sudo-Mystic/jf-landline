@@ -27,7 +27,7 @@ import com.jio.calling.util.JioCallLogHelper;
 /**
  * Active in-call screen for JioFiber landline calls.
  * Displays on top of the lockscreen / stock dialer as a standalone overlay.
- * Styled in the clean stock Android KitKat phone UI aesthetic.
+ * Uses the shared Field Notes calling UI with large, reachable controls.
  */
 public class InCallActivity extends Activity implements JioCallListener {
     public static final String EXTRA_NUMBER = "extra_number";
@@ -175,7 +175,7 @@ public class InCallActivity extends Activity implements JioCallListener {
         }
         if (tvKeypadLabel != null) {
             tvKeypadLabel.setText(isKeypadVisible ? "Hide" : "Dialpad");
-            tvKeypadLabel.setTextColor(getResources().getColor(isKeypadVisible ? R.color.accent : R.color.text_secondary));
+            tvKeypadLabel.setTextColor(getResources().getColor(isKeypadVisible ? R.color.call_accent : R.color.on_dark_secondary));
         }
     }
 
@@ -185,7 +185,7 @@ public class InCallActivity extends Activity implements JioCallListener {
         btnMute.setBackgroundResource(muted ? R.drawable.bg_action_circle_red : R.drawable.bg_action_circle);
         if (tvMuteLabel != null) {
             tvMuteLabel.setText(muted ? "Muted" : "Mute");
-            tvMuteLabel.setTextColor(getResources().getColor(muted ? R.color.call_red : R.color.text_secondary));
+            tvMuteLabel.setTextColor(getResources().getColor(muted ? R.color.on_dark_error : R.color.on_dark_secondary));
         }
     }
 
@@ -195,7 +195,7 @@ public class InCallActivity extends Activity implements JioCallListener {
         btnSpeaker.setBackgroundResource(speaker ? R.drawable.bg_action_circle_green : R.drawable.bg_action_circle);
         if (tvSpeakerLabel != null) {
             tvSpeakerLabel.setText(speaker ? "Speaker ON" : "Speaker");
-            tvSpeakerLabel.setTextColor(getResources().getColor(speaker ? R.color.call_green : R.color.text_secondary));
+            tvSpeakerLabel.setTextColor(getResources().getColor(speaker ? R.color.call_accent : R.color.on_dark_secondary));
         }
     }
 

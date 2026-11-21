@@ -33,6 +33,8 @@
     <color name="call_background">#0A2226</color>
     <color name="call_surface">#14373A</color>
     <color name="call_accent">#A4E8C1</color>
+    <color name="on_dark_warning">#F2CE85</color>
+    <color name="on_dark_error">#FFB6BE</color>
 
     <color name="dialpad_button">#1D4245</color>
     <color name="btn_secondary">#EDF4EF</color>

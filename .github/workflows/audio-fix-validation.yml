@@ -23,6 +23,10 @@ jobs:
           distribution: temurin
           java-version: '17'
           cache: gradle
+      - name: Set candidate version above upstream v1.0.4
+        run: |
+          sed -i 's/versionCode 1/versionCode 5/' app/build.gradle
+          sed -i 's/versionName "1.0.0"/versionName "1.0.5-audiofix"/' app/build.gradle
       - name: Build debug and signed release test APKs
         run: bash ./gradlew assembleDebug assembleRelease --no-daemon
       - name: Upload test APK

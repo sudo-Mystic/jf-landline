@@ -18,6 +18,7 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SwitchCompat;
 import androidx.core.app.ActivityCompat;
@@ -269,13 +270,18 @@ public class MainActivity extends AppCompatActivity implements JioRegistrationLi
         }
 
         // --- 3. Refresh Credentials / Router Sync ---
-        btnRefresh.setOnClickListener(v -> {
-            Toast.makeText(this, "Re-discovering router & credentials...", Toast.LENGTH_SHORT).show();
-            JioAccountStorage.clear(this);
-            Intent refreshIntent = new Intent(this, JioSipService.class);
-            refreshIntent.setAction(JioSipService.ACTION_START);
-            ContextCompat.startForegroundService(this, refreshIntent);
-        });
+        btnRefresh.setOnClickListener(v -> new AlertDialog.Builder(this)
+                .setTitle("Re-provision landline?")
+                .setMessage("This clears saved Jio credentials and discovers them again from your router. Use it only when registration needs repair.")
+                .setNegativeButton("Cancel", null)
+                .setPositiveButton("Continue", (dialog, which) -> {
+                    Toast.makeText(this, "Re-discovering router and credentials...", Toast.LENGTH_SHORT).show();
+                    JioAccountStorage.clear(this);
+                    Intent refreshIntent = new Intent(this, JioSipService.class);
+                    refreshIntent.setAction(JioSipService.ACTION_START);
+                    ContextCompat.startForegroundService(this, refreshIntent);
+                })
+                .show());
 
         // --- 4. Companion PIN Management ---
         btnNewPin.setOnClickListener(v -> {
@@ -350,15 +356,15 @@ public class MainActivity extends AppCompatActivity implements JioRegistrationLi
             ivStatusDot.setImageResource(R.drawable.ic_dot_green);
             tvStatusPill.setText("ONLINE");
             tvStatusPill.setTextColor(getResources().getColor(R.color.call_green));
-            tvStatusDesc.setText("Status: Registered (Ready for Calls)");
-            tvStatusDesc.setTextColor(getResources().getColor(R.color.call_green));
+            tvStatusDesc.setText("Line ready for calls");
+            tvStatusDesc.setTextColor(getResources().getColor(R.color.call_accent));
         } else {
             llStatusPill.setBackgroundResource(R.drawable.bg_status_pill_amber);
             ivStatusDot.setImageResource(R.drawable.ic_dot_amber);
             tvStatusPill.setText("CONNECTING");
             tvStatusPill.setTextColor(getResources().getColor(R.color.status_amber));
-            tvStatusDesc.setText("Status: Connecting to router...");
-            tvStatusDesc.setTextColor(getResources().getColor(R.color.status_amber));
+            tvStatusDesc.setText("Connecting to Jio router…");
+            tvStatusDesc.setTextColor(getResources().getColor(R.color.on_dark_warning));
         }
 
         // Companion Gateway display
@@ -397,8 +403,8 @@ public class MainActivity extends AppCompatActivity implements JioRegistrationLi
             ivStatusDot.setImageResource(R.drawable.ic_dot_amber);
             tvStatusPill.setText("CONNECTING");
             tvStatusPill.setTextColor(getResources().getColor(R.color.status_amber));
-            tvStatusDesc.setText("Status: Connecting to Jio router...");
-            tvStatusDesc.setTextColor(getResources().getColor(R.color.status_amber));
+            tvStatusDesc.setText("Connecting to Jio router…");
+            tvStatusDesc.setTextColor(getResources().getColor(R.color.on_dark_warning));
         });
     }
 
@@ -416,8 +422,8 @@ public class MainActivity extends AppCompatActivity implements JioRegistrationLi
             ivStatusDot.setImageResource(R.drawable.ic_dot_red);
             tvStatusPill.setText("OFFLINE");
             tvStatusPill.setTextColor(getResources().getColor(R.color.call_red));
-            tvStatusDesc.setText("Status: Registration Failed (" + statusCode + ")");
-            tvStatusDesc.setTextColor(getResources().getColor(R.color.call_red));
+            tvStatusDesc.setText("Registration failed (" + statusCode + ")");
+            tvStatusDesc.setTextColor(getResources().getColor(R.color.on_dark_error));
         });
     }
 
@@ -428,8 +434,8 @@ public class MainActivity extends AppCompatActivity implements JioRegistrationLi
             ivStatusDot.setImageResource(R.drawable.ic_dot_red);
             tvStatusPill.setText("DISCONNECTED");
             tvStatusPill.setTextColor(getResources().getColor(R.color.call_red));
-            tvStatusDesc.setText("Status: Disconnected");
-            tvStatusDesc.setTextColor(getResources().getColor(R.color.call_red));
+            tvStatusDesc.setText("Line disconnected");
+            tvStatusDesc.setTextColor(getResources().getColor(R.color.on_dark_error));
         });
     }
 

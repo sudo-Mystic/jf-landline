@@ -16,11 +16,11 @@
             <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical">
                 <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:orientation="vertical" android:layout_weight="1" android:paddingRight="8dp">
                     <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="YOUR JIO LINE" android:textColor="@color/on_dark_secondary" android:textSize="11sp" android:textStyle="bold" android:letterSpacing="0.13" />
-                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="033-31628760" android:id="@+id/tv_phone_number" android:textColor="@color/on_dark_primary" android:textSize="29sp" android:textStyle="bold" android:layout_marginTop="6dp" android:singleLine="true" android:ellipsize="end" />
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Checking line…" android:id="@+id/tv_phone_number" android:textColor="@color/on_dark_primary" android:textSize="29sp" android:textStyle="bold" android:layout_marginTop="6dp" android:singleLine="true" android:ellipsize="end" />
                 </LinearLayout>
                 <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="●" android:textColor="@color/call_accent" android:textSize="19sp" android:contentDescription="Connection indicator" />
             </LinearLayout>
-            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Checking connection…" android:id="@+id/tv_status_desc" android:textColor="@color/on_dark_secondary" android:textSize="13sp" android:layout_marginTop="12dp" android:maxLines="2" />
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Checking connection…" android:id="@+id/tv_status_desc" android:accessibilityLiveRegion="polite" android:textColor="@color/on_dark_secondary" android:textSize="13sp" android:layout_marginTop="12dp" android:maxLines="2" />
             <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#527572" android:layout_marginTop="22dp" android:layout_marginBottom="18dp" />
             <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical">
                 <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:orientation="vertical" android:layout_weight="1" android:paddingRight="8dp">
@@ -60,7 +60,7 @@
                     <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Intercept dialer calls" style="@style/DashboardRowTitle" />
                     <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Route supported outgoing calls through this landline." style="@style/DashboardRowSubtitle" android:layout_marginTop="4dp" android:maxLines="3" />
                 </LinearLayout>
-                <androidx.appcompat.widget.SwitchCompat android:id="@+id/switch_intercept" android:layout_width="wrap_content" android:layout_height="48dp" android:minWidth="48dp" />
+                <androidx.appcompat.widget.SwitchCompat android:id="@+id/switch_intercept" android:contentDescription="Intercept stock dialer calls" android:layout_width="wrap_content" android:layout_height="48dp" android:minWidth="48dp" />
             </LinearLayout>
             <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:background="@drawable/bg_card_inner" android:padding="13dp" android:layout_marginTop="4dp">
                 <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Checking interception settings…" android:id="@+id/tv_intercept_status" android:textColor="@color/text_secondary" android:textSize="12sp" android:maxLines="3" />
@@ -78,7 +78,7 @@
                         <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="System calling account" style="@style/DashboardRowTitle" />
                         <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Allow Android to recognize this Jio line." style="@style/DashboardRowSubtitle" android:layout_marginTop="4dp" android:maxLines="3" />
                     </LinearLayout>
-                    <androidx.appcompat.widget.SwitchCompat android:id="@+id/switch_telecom" android:layout_width="wrap_content" android:layout_height="48dp" android:minWidth="48dp" />
+                    <androidx.appcompat.widget.SwitchCompat android:id="@+id/switch_telecom" android:contentDescription="Use Android system calling account" android:layout_width="wrap_content" android:layout_height="48dp" android:minWidth="48dp" />
                 </LinearLayout>
                 <View android:layout_width="match_parent" android:layout_height="1dp" android:background="@color/divider" android:layout_marginBottom="8dp" android:layout_marginTop="4dp" />
                 <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical" android:minHeight="76dp">
@@ -86,7 +86,7 @@
                         <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Use Android call screen" style="@style/DashboardRowTitle" />
                         <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Show the phone's native in-call interface." style="@style/DashboardRowSubtitle" android:layout_marginTop="4dp" android:maxLines="3" />
                     </LinearLayout>
-                    <androidx.appcompat.widget.SwitchCompat android:id="@+id/switch_telecom_ui" android:layout_width="wrap_content" android:layout_height="48dp" android:minWidth="48dp" />
+                    <androidx.appcompat.widget.SwitchCompat android:id="@+id/switch_telecom_ui" android:contentDescription="Use Android in-call screen" android:layout_width="wrap_content" android:layout_height="48dp" android:minWidth="48dp" />
                 </LinearLayout>
                 <Button android:id="@+id/btn_open_telecom_settings" android:layout_width="match_parent" android:layout_height="48dp" android:text="Open Android calling settings" android:textAllCaps="false" android:minHeight="48dp" android:layout_marginTop="10dp" android:background="@drawable/bg_btn_secondary" android:textColor="@color/text_primary" android:textSize="13sp" />
                 <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Checking Android Telecom…" android:id="@+id/tv_telecom_status" android:textColor="@color/text_secondary" android:textSize="12sp" android:layout_marginTop="12dp" android:maxLines="2" />
@@ -126,7 +126,7 @@
                 </LinearLayout>
                 <View android:layout_width="match_parent" android:layout_height="1dp" android:background="@color/divider" />
                 <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:paddingTop="11dp" android:paddingBottom="11dp">
-                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Codec: AMR-NB" android:id="@+id/tv_diag_codec" android:textColor="@color/text_secondary" android:textSize="13sp" android:singleLine="true" android:ellipsize="end" />
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Codec: AMR-NB preferred" android:id="@+id/tv_diag_codec" android:textColor="@color/text_secondary" android:textSize="13sp" android:singleLine="true" android:ellipsize="end" />
                 </LinearLayout>
                 <View android:layout_width="match_parent" android:layout_height="1dp" android:background="@color/divider" />
                 <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:paddingTop="11dp" android:paddingBottom="11dp">

@@ -6,9 +6,9 @@
             <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:text="JIO LANDLINE" android:textColor="@color/on_dark_secondary" android:textSize="11sp" android:textStyle="bold" android:letterSpacing="0.12" android:layout_weight="1" />
             <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="VOICE" android:textColor="@color/on_dark_muted" android:textSize="11sp" android:textStyle="bold" android:letterSpacing="0.1" />
         </LinearLayout>
-        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="7044756295" android:id="@+id/tv_call_number" android:textColor="@color/on_dark_primary" android:textSize="31sp" android:textStyle="bold" android:layout_marginTop="25dp" android:singleLine="true" android:ellipsize="end" />
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Unknown number" android:id="@+id/tv_call_number" android:textColor="@color/on_dark_primary" android:textSize="31sp" android:textStyle="bold" android:layout_marginTop="25dp" android:singleLine="true" android:ellipsize="end" />
         <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical" android:layout_marginTop="10dp">
-            <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:text="Calling…" android:id="@+id/tv_call_status" android:textColor="@color/on_dark_secondary" android:textSize="14sp" android:layout_weight="1" maxL="2" />
+            <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:text="Calling…" android:id="@+id/tv_call_status" android:accessibilityLiveRegion="polite" android:textColor="@color/on_dark_secondary" android:textSize="14sp" android:layout_weight="1" maxL="2" />
             <Chronometer android:id="@+id/call_chronometer" android:layout_width="wrap_content" android:layout_height="wrap_content" android:textColor="@color/call_accent" android:textSize="18sp" android:textStyle="bold" android:visibility="gone" />
         </LinearLayout>
     </LinearLayout>

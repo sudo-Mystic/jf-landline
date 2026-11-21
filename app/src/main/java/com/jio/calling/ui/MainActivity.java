@@ -6,6 +6,8 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -383,6 +385,20 @@ public class MainActivity extends AppCompatActivity implements JioRegistrationLi
             tvDiagMac.setText("MAC: " + account.getVirtualMac().toUpperCase());
         }
         tvDiagAndroid.setText("OS: Android " + Build.VERSION.RELEASE + " (API " + Build.VERSION.SDK_INT + ")");
+
+        // Show a grounded connection state, not a hardcoded Wi-Fi network name.
+        try {
+            ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+            NetworkInfo network = cm != null ? cm.getActiveNetworkInfo() : null;
+            if (network != null && network.isConnected()) {
+                tvWifiSsid.setText(network.getType() == ConnectivityManager.TYPE_WIFI
+                        ? "Wi-Fi connected" : "Network connected");
+            } else {
+                tvWifiSsid.setText("Network offline");
+            }
+        } catch (Exception e) {
+            tvWifiSsid.setText("Network unavailable");
+        }
 
         if (JioTelecomManager.isSupported()) {
             updateTelecomStatusText();

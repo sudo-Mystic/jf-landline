@@ -1,77 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="@color/background"
-    android:padding="24dp"
-    android:gravity="center_horizontal">
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Incoming Jio Call"
-        android:textColor="@color/accent"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        android:layout_marginTop="48dp" />
-
-    <TextView
-        android:id="@+id/tv_caller_name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Jio Landline"
-        android:textColor="@color/text_secondary"
-        android:textSize="16sp"
-        android:layout_marginTop="16dp" />
-
-    <TextView
-        android:id="@+id/tv_caller_number"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="+91 98300 12345"
-        android:textColor="@color/text_primary"
-        android:textSize="28sp"
-        android:textStyle="bold"
-        android:layout_marginTop="8dp" />
-
-    <!-- Spacer -->
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1" />
-
-    <!-- Action Buttons -->
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginBottom="32dp">
-
-        <Button
-            android:id="@+id/btn_decline"
-            android:layout_width="0dp"
-            android:layout_height="64dp"
-            android:layout_weight="1"
-            android:text="Decline"
-            android:textColor="@color/text_primary"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            android:background="@color/call_red"
-            android:layout_marginRight="8dp" />
-
-        <Button
-            android:id="@+id/btn_answer"
-            android:layout_width="0dp"
-            android:layout_height="64dp"
-            android:layout_weight="1"
-            android:text="Answer"
-            android:textColor="@color/text_primary"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            android:background="@color/call_green"
-            android:layout_marginLeft="8dp" />
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent" android:layout_height="match_parent" android:background="@color/call_background" android:paddingLeft="23dp" android:paddingRight="23dp" android:paddingTop="18dp" android:paddingBottom="16dp">
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:id="@+id/incoming_top" android:layout_alignParentTop="true" android:paddingTop="10dp" android:paddingBottom="12dp">
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical">
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="●" android:textColor="@color/call_accent" android:textSize="16sp" android:layout_marginRight="7dp" />
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="JIO LANDLINE" android:textColor="@color/on_dark_secondary" android:textSize="11sp" android:textStyle="bold" android:letterSpacing="0.12" />
+        </LinearLayout>
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Incoming call" android:textColor="@color/on_dark_muted" android:textSize="15sp" android:layout_marginTop="25dp" />
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Jio Landline" android:id="@+id/tv_caller_name" android:textColor="@color/on_dark_primary" android:textSize="22sp" android:textStyle="bold" android:layout_marginTop="10dp" android:singleLine="true" android:ellipsize="end" />
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="+91 98300 12345" android:id="@+id/tv_caller_number" android:textColor="@color/on_dark_primary" android:textSize="30sp" android:textStyle="bold" android:layout_marginTop="8dp" android:singleLine="true" android:ellipsize="end" />
     </LinearLayout>
-
-</LinearLayout>
-
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:id="@+id/incoming_footer" android:layout_alignParentBottom="true" android:paddingBottom="25dp">
+        <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:text="SWIPE-FREE CALL CONTROLS" android:textColor="@color/on_dark_muted" android:textSize="10sp" android:textStyle="bold" android:gravity="center" android:letterSpacing="0.1" android:layout_marginBottom="20dp" />
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical" android:layout_marginBottom="13dp">
+            <Button android:id="@+id/btn_decline" android:layout_width="0dp" android:layout_height="64dp" android:layout_weight="1" android:background="@drawable/bg_incoming_decline" android:text="Decline" android:textColor="@color/on_dark_primary" android:textSize="16sp" android:textStyle="bold" android:textAllCaps="false" android:minHeight="56dp" android:layout_marginRight="8dp" />
+            <Button android:id="@+id/btn_answer" android:layout_width="0dp" android:layout_height="64dp" android:layout_weight="1" android:background="@drawable/bg_incoming_answer" android:text="Answer" android:textColor="@color/primary" android:textSize="16sp" android:textStyle="bold" android:textAllCaps="false" android:minHeight="56dp" android:layout_marginLeft="8dp" />
+        </LinearLayout>
+        <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Powered by your Jio landline" android:textColor="@color/on_dark_muted" android:textSize="12sp" android:gravity="center" />
+    </LinearLayout>
+    <FrameLayout android:layout_width="match_parent" android:layout_height="match_parent" android:layout_below="@id/incoming_top" android:layout_above="@id/incoming_footer">
+        <ImageView android:layout_width="154dp" android:layout_height="154dp" android:layout_gravity="center" android:src="@drawable/ic_in_call_avatar" android:background="@drawable/bg_live_roundel" android:padding="43dp" android:scaleType="fitCenter" android:contentDescription="Incoming phone call" />
+    </FrameLayout>
+</RelativeLayout>

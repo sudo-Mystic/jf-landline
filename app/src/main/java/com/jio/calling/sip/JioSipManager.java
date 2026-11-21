@@ -1,10 +1,15 @@
 package com.jio.calling.sip;
 
+import android.Manifest;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
 
+import androidx.core.content.ContextCompat;
+
+import com.jio.calling.audio.JioAudioManager;
 import com.jio.calling.model.JioAccount;
 import com.jio.calling.util.JioCallLogHelper;
 
@@ -43,6 +48,7 @@ public class JioSipManager {
     private static JioSipManager instance;
 
     private final Context context;
+    private final JioAudioManager callAudioManager;
     private final Handler mainHandler = new Handler(Looper.getMainLooper());
 
     private Endpoint endpoint;
@@ -64,6 +70,7 @@ public class JioSipManager {
 
     private JioSipManager(Context context) {
         this.context = context.getApplicationContext();
+        this.callAudioManager = new JioAudioManager(this.context);
     }
 
     public static synchronized JioSipManager getInstance(Context context) {
@@ -75,6 +82,20 @@ public class JioSipManager {
 
     public Endpoint getEndpoint() {
         return endpoint;
+    }
+
+    /** Audio is owned by the SIP call lifecycle, not the activity lifecycle. */
+    public JioAudioManager getCallAudioManager() {
+        return callAudioManager;
+    }
+
+    private boolean prepareCallAudio() {
+        if (ContextCompat.checkSelfPermission(context, Manifest.permission.RECORD_AUDIO)
+                != PackageManager.PERMISSION_GRANTED) {
+            Log.e(TAG, "Cannot start outgoing audio: RECORD_AUDIO not granted");
+            return false;
+        }
+        return callAudioManager.startCallAudio();
     }
 
     public void addRegistrationListener(JioRegistrationListener l) {
@@ -523,6 +544,11 @@ public class JioSipManager {
             return;
         }
 
+        // Must run for custom UI, Android Telecom UI and gateway-initiated calls.
+        if (!prepareCallAudio()) {
+            notifyCallTerminated("Microphone permission or audio setup failed");
+            return;
+        }
         ensureThreadRegistered();
 
         String cleanNumber = formatDestinationNumber(destinationNumber);
@@ -590,6 +616,8 @@ public class JioSipManager {
             notifyCallConnecting();
         } catch (Exception e) {
             Log.e(TAG, "Failed to initiate native call: " + e.getMessage(), e);
+            isCallActive = false;
+            callAudioManager.stopCallAudio();
             notifyCallTerminated("Call Failed: " + e.getMessage());
         }
     }
@@ -632,6 +660,11 @@ public class JioSipManager {
 
     public synchronized void answerCall() {
         if (activeCall != null) {
+            if (!prepareCallAudio()) {
+                Log.e(TAG, "Cannot answer: microphone permission or audio setup failed");
+                hangupCall(); // Never answer a call with known-inoperative microphone setup.
+                return;
+            }
             ensureThreadRegistered();
             try {
                 CallOpParam prm = new CallOpParam(true);
@@ -791,6 +824,7 @@ public class JioSipManager {
 
     public void connectActiveCallMedia() {
         if (activeCall != null) {
+            ensureThreadRegistered();
             activeCall.connectMedia();
         }
     }
@@ -854,6 +888,7 @@ public class JioSipManager {
             if (call != null) {
                 call.disconnectMedia();
             }
+            callAudioManager.stopCallAudio();
             notifyCallTerminated(reason != null && !reason.isEmpty() ? reason : "Call Terminated");
             if (activeCall == call) {
                 activeCall = null;

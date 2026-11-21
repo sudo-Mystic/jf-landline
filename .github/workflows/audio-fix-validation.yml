@@ -1,0 +1,43 @@
+name: Validate one-way audio fix
+
+on:
+  push:
+    branches:
+      - fix/one-way-microphone-audio
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  android-debug:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+      - name: Set up Java 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+          cache: gradle
+      - name: Set candidate version above upstream v1.0.4
+        run: |
+          sed -i 's/versionCode 1/versionCode 5/' app/build.gradle
+          sed -i 's/versionName "1.0.0"/versionName "1.0.5-audiofix"/' app/build.gradle
+      - name: Build debug and signed release test APKs
+        run: bash ./gradlew assembleDebug assembleRelease --no-daemon
+      - name: Upload test APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: jf-landline-audio-fix-debug
+          path: app/build/outputs/apk/debug/app-debug.apk
+          if-no-files-found: error
+      - name: Upload signed release test APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: jf-landline-audio-fix-release-test
+          path: app/build/outputs/apk/release/app-release.apk
+          if-no-files-found: error

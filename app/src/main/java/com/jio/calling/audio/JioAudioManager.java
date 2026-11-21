@@ -25,6 +25,7 @@ public class JioAudioManager implements SensorEventListener {
     private boolean isSpeakerphoneOn = false;
     private boolean isMuted = false;
     private int savedAudioMode = AudioManager.MODE_NORMAL;
+    private boolean callAudioStarted = false;
 
     public interface ProximityListener {
         void onProximityChanged(boolean isNear);
@@ -63,8 +64,9 @@ public class JioAudioManager implements SensorEventListener {
     /**
      * Prepares audio hardware for an active VoIP voice call.
      */
-    public void startCallAudio() {
-        if (audioManager == null) return;
+    public synchronized boolean startCallAudio() {
+        if (audioManager == null) return false;
+        if (callAudioStarted) return true;
 
         savedAudioMode = audioManager.getMode();
 
@@ -92,8 +94,13 @@ public class JioAudioManager implements SensorEventListener {
         // 3. Put audio hardware into communication mode and default to earpiece
         try {
             audioManager.setMode(AudioManager.MODE_IN_COMMUNICATION);
-        } catch (Exception ignored) {}
+        } catch (Exception e) {
+            Log.e(TAG, "Could not enter MODE_IN_COMMUNICATION", e);
+            try { audioManager.abandonAudioFocus(null); } catch (Exception ignored) {}
+            return false;
+        }
 
+        callAudioStarted = true;
         setSpeakerphone(false);
         setMute(false);
 
@@ -103,6 +110,7 @@ public class JioAudioManager implements SensorEventListener {
         }
 
         Log.i(TAG, "Audio configured for active call (STREAM_VOICE_CALL / MODE_IN_COMMUNICATION / Earpiece)");
+        return true;
     }
 
     /**
@@ -136,8 +144,9 @@ public class JioAudioManager implements SensorEventListener {
     /**
      * Restores normal audio hardware settings when a call finishes.
      */
-    public void stopCallAudio() {
-        if (audioManager == null) return;
+    public synchronized void stopCallAudio() {
+        if (audioManager == null || !callAudioStarted) return;
+        callAudioStarted = false;
 
         if (proximityWakeLock != null && proximityWakeLock.isHeld()) {
             try {
@@ -149,9 +158,13 @@ public class JioAudioManager implements SensorEventListener {
             sensorManager.unregisterListener(this);
         }
 
-        audioManager.setSpeakerphoneOn(false);
-        audioManager.setMicrophoneMute(false);
-        audioManager.setMode(AudioManager.MODE_NORMAL);
+        try {
+            audioManager.setSpeakerphoneOn(false);
+            audioManager.setMicrophoneMute(false);
+            audioManager.setMode(savedAudioMode);
+        } catch (Exception e) {
+            Log.w(TAG, "Could not restore previous audio mode: " + e.getMessage());
+        }
 
         // Restore ring, music, and system stream volumes so the phone sounds remain fully audible
         try {

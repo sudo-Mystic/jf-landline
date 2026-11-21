@@ -4,6 +4,7 @@ import android.annotation.TargetApi;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Build;
+import android.telecom.CallAudioState;
 import android.telecom.Connection;
 import android.telecom.DisconnectCause;
 import android.telecom.TelecomManager;
@@ -43,7 +44,7 @@ public class JioConnection extends Connection implements JioCallListener {
     public void onAnswer() {
         Log.i(TAG, "Telecom onAnswer called");
         sipManager.answerCall();
-        setActive();
+        // setActive() occurs when the real SIP call is confirmed.
     }
 
     @Override
@@ -68,6 +69,16 @@ public class JioConnection extends Connection implements JioCallListener {
         sipManager.hangupCall();
         setDisconnected(new DisconnectCause(DisconnectCause.CANCELED));
         destroy();
+    }
+
+    @Override
+    public void onCallAudioStateChanged(CallAudioState state) {
+        super.onCallAudioStateChanged(state);
+        if (state != null && sipManager.isCallActive()) {
+            sipManager.getCallAudioManager().setMute(state.isMuted());
+            // Telecom owns the route; do not call AudioManager.setSpeakerphoneOn here.
+            sipManager.setSpeakerphoneActive(state.getRoute() == CallAudioState.ROUTE_SPEAKER);
+        }
     }
 
     @Override
